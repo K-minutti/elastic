@@ -1,9 +1,11 @@
-import streamlit as st
+import fastapi
+import uvicorn
 
-st.title("Elastic App")
+api = fastapi.FastAPI()
 
-st.sidebar.write("Pick your stock, industry, commodity, or crypto")
+@api.get('/api/calculate')
+def calculate():
+    return 2 + 2
 
-st.header("Just testing and flexing whats good")
 
-st.write("Hey how are you doing?")
+uvicorn.run(api, host="127.0.0.1", port=8000)
