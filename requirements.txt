@@ -2,3 +2,5 @@ python-dotenv
 expertai-nlapi
 fastapi
 uvicorn[standard]
+yfinance
+httpx
