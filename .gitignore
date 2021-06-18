@@ -1,4 +1,5 @@
 .vscode
 .env
+database.ini
 config.py
 __pycache__
