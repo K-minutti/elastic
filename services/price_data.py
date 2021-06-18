@@ -13,8 +13,7 @@ def get_data(symbol):
         print(f'There was an error with the symbol {symbol}. No data found.')
 
 
-
-#
+#analyst recommendations n = yf.Ticker("NOVN") n.recommendations
 #Here we will call yahoo finance by ticker and 
 #return the data as need for graphing 
 #we will need 15 minute/1hr data if 1hr is not available we will convert 
