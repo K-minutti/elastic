@@ -9,7 +9,9 @@ def create_tables():
             id SERIAL PRIMARY KEY, 
             symbol TEXT NOT NULL UNIQUE,
             name TEXT NOT NULL,
-            exchange TEXT NOT NULL
+            exchange TEXT NOT NULL,
+            market_cap NUMERIC(24,10) NOT NULL,
+            sector TEXT NOT NULL
         )
         """, 
         """ 
@@ -17,10 +19,10 @@ def create_tables():
             id SERIAL PRIMARY KEY,
             stock_id INTEGER NOT NULL,
             date DATE NOT NULL,
-            open NUMERIC(7,2) NOT NULL,
-            high NUMERIC(7,2) NOT NULL,
-            low NUMERIC(7,2) NOT NULL,
-            close NUMERIC(7,2) NOT NULL,
+            open NUMERIC(10,2) NOT NULL,
+            high NUMERIC(10,2) NOT NULL,
+            low NUMERIC(10,2) NOT NULL,
+            close NUMERIC(10,2) NOT NULL,
             volume INTEGER NOT NULL,
             FOREIGN KEY (stock_id) REFERENCES stock (id)
         )
