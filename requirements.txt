@@ -6,3 +6,4 @@ yfinance
 httpx
 psycopg2
 configparser
+pandas

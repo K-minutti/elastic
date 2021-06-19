@@ -19,11 +19,12 @@ def create_tables():
             id SERIAL PRIMARY KEY,
             stock_id INTEGER NOT NULL,
             date DATE NOT NULL,
-            open NUMERIC(10,2) NOT NULL,
-            high NUMERIC(10,2) NOT NULL,
-            low NUMERIC(10,2) NOT NULL,
-            close NUMERIC(10,2) NOT NULL,
-            volume INTEGER NOT NULL,
+            open NUMERIC(14,2) NOT NULL,
+            high NUMERIC(14,2) NOT NULL,
+            low NUMERIC(14,2) NOT NULL,
+            close NUMERIC(14,2) NOT NULL,
+            volume NUMERIC(24,0) NOT NULL,
+            interval TEXT NOT NULL,
             FOREIGN KEY (stock_id) REFERENCES stock (id)
         )
         """)
