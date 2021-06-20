@@ -35,6 +35,7 @@ def create_tables():
             date DATE NOT NULL, 
             content TEXT NOT NULL, 
             source TEXT NOT NULL, 
+            FOREIGN KEY (stock_id) REFERENCES stock (id)
         )
         """,
         """ 
@@ -43,11 +44,12 @@ def create_tables():
             stock_id INTEGER NOT NULL,
             date DATE NOT NULL,
             content TEXT NOT NULL,
-            forum TEXT NOT NULL,
+            subreddit TEXT NOT NULL,
+            FOREIGN KEY (stock_id) REFERENCES stock (id)
         )
         """,
         """
-        CREATE TABLE expert_analysis (
+        CREATE TABLE expert_analysis_news (
             id SERIAL PRIMARY KEY,
             source_id INTEGER NOT NULL, 
             source_type TEXT NOT NULL,
@@ -56,7 +58,20 @@ def create_tables():
             main_lemmas TEXT ARRAY,
             topics TEXT ARRAY, 
             sentiment NUMERIC(5,2) NOT NULL,
+            FOREIGN KEY (source_id) REFERENCES news (id)
         )
+        """,
+        """
+       CREATE TABLE expert_analysis_reddit (
+            id SERIAL PRIMARY KEY,
+            source_id INTEGER NOT NULL, 
+            source_type TEXT NOT NULL,
+            entities TEXT ARRAY,
+            main_phrases TEXT ARRAY,
+            main_lemmas TEXT ARRAY,
+            topics TEXT ARRAY, 
+            sentiment NUMERIC(5,2) NOT NULL,
+            FOREIGN KEY (source_id) REFERENCES reddit (id)
         """
         
         )

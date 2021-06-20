@@ -9,3 +9,4 @@ configparser
 pandas
 pygooglenews
 newspaper3k
+psaw
