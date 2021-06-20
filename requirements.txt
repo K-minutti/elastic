@@ -2,8 +2,10 @@ python-dotenv
 expertai-nlapi
 fastapi
 uvicorn[standard]
-yfinance
+yfinancec
 httpx
 psycopg2
 configparser
 pandas
+pygooglenews
+newspaper3k

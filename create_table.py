@@ -27,7 +27,42 @@ def create_tables():
             interval TEXT NOT NULL,
             FOREIGN KEY (stock_id) REFERENCES stock (id)
         )
-        """)
+        """, 
+        """
+        CREATE TABLE news (
+            id SERIAL PRIMARY KEY,
+            stock_id INTEGER NOT NULL, 
+            date DATE NOT NULL, 
+            content TEXT NOT NULL, 
+            source TEXT NOT NULL, 
+        )
+        """,
+        """ 
+        CREATE TABLE reddit (C
+            id SERIAL PRIMARY KEY,
+            stock_id INTEGER NOT NULL,
+            date DATE NOT NULL,
+            content TEXT NOT NULL,
+            forum TEXT NOT NULL,
+        )
+        """,
+        """
+        CREATE TABLE expert_analysis (
+            id SERIAL PRIMARY KEY,
+            source_id INTEGER NOT NULL, 
+            source_type TEXT NOT NULL,
+            entities TEXT ARRAY,
+            main_phrases TEXT ARRAY,
+            main_lemmas TEXT ARRAY,
+            topics TEXT ARRAY, 
+            sentiment NUMERIC(5,2) NOT NULL,
+        )
+        """
+        
+        )
+
+    #we will have a separate table for the data receive from expert ai every news item and every reddit post will have
+    #a row of data for it in the expert_analysis table which will hold all the data from the full_analysis() func in the expert api sdk
 
     connection = None
     try: 

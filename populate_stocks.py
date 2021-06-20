@@ -2,12 +2,14 @@ import csv
 import psycopg2
 from config import config
 
+
+"""
+For demo purposes the database only has 5 stocks. But you can use the stock_universe.csv file to populate the database with over 3,000 stocks.
+"""
+
 def populate_stocks():
     connection = None
     insert_stock = "INSERT INTO stock(symbol, name, exchange, market_cap, sector) VALUES(%s, %s, %s, %s, %s)"
-
-    with open('data/sp500.csv') as f:
-        sp500_tickers = [line.rstrip('\n') for line in f]   
 
     try:
         params= config()
@@ -15,19 +17,16 @@ def populate_stocks():
         connection = psycopg2.connect(**params)
         cursor = connection.cursor()
 
-        #Reading csv with stock universe 
-        with open('data/stock_universe.csv', mode='r') as file:
+        #Reading csv with stocks 
+        with open('data/stocks.csv', mode='r') as file:
             csv_reader = csv.DictReader(file)
             count = 0
             for row in csv_reader:
                 if count == 0:
-                    print("Reading stock csv rows")
+                    print("Reading stock csv rows --- Skipping header row")
                     count +=1
-                if row['Market Capitalization'] == '' or row['Sector'] == '':
-                    count += 1
-                    continue
-                if row['Ticker'] in sp500_tickers:
-                    print(f"{count}. --- {row['Ticker']}--- Added.")
+                if row['Market Capitalization'] != '' and row['Sector'] != '':
+                    print(f"{count}. --- {row['Ticker']} --- Added.")
                     cursor.execute(insert_stock, (row['Ticker'], row['Description'], row['Exchange'], row['Market Capitalization'], row['Sector']))
                     count += 1
         connection.commit()
