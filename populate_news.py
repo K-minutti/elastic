@@ -1,6 +1,6 @@
 import datetime
 import time
-import config
+from config import config
 import psycopg2
 import psycopg2.extras
 from pygooglenews import GoogleNews
@@ -28,9 +28,9 @@ def populate_news():
 
         today = datetime.datetime.today().isoformat()
         lookback = datetime.datetime(2021,4,15).isoformat()
-        for stock in stocks:
+        for symbol in stocks:
             try:
-                search = gn.search(stock['symbol'], from_=lookback, to_=today)
+                search = gn.search(f"STOCK:{symbol}", from_=lookback, to_=today)
                 for entry in search['entries']:
                     try:
                         url= entry['link']
@@ -42,7 +42,7 @@ def populate_news():
                         continue
                     article.parse()
                     publish_date = time.strftime('%Y-%m-%dT%H:%M:%SZ',  entry['published_parsed'])
-                    cursor.execute(insert_news, (stock['id'], publish_date, entry['title'], article.text, entry['source']['title']))
+                    cursor.execute(insert_news, (stocks[symbol], publish_date, entry['title'], article.text, entry['source']['title']))
             except Exception as error:
                 print(error)            
         connection.commit()

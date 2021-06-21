@@ -18,4 +18,5 @@ def get_sentiment_by_symbol(symbol: str):
     return {"price_data_1M": one_month}
 
 
+
 uvicorn.run(api, host="127.0.0.1", port=8000)

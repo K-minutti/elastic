@@ -1,4 +1,4 @@
-import config
+from config import config
 import psycopg2
 import psycopg2.extras
 from expert import expert_ai_analysis

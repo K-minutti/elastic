@@ -3,6 +3,7 @@ import datetime
 import config
 import psycopg2
 import psycopg2.extras
+from config import config
 
 api = PushshiftAPI()
 
@@ -24,21 +25,21 @@ def populate_reddit():
         insert_mention = "INSERT INTO reddit(stock_id, date, content, subreddit) VALUES(%s, %s, %s, %s)"
                 
         all_subreddits = ['stocks', 'wallstreetbets']
+        start_epoch = int(datetime.datetime(2021,4,15).timestamp())
         for subreddit in all_subreddits:
-            start_epoch = int(datetime.datetime(2021,4,15).timestamp())
-            subs = list(api.search_submissions(after=start_epoch, 
+            subs = api.search_submissions(after=start_epoch, 
                                             subreddit=subreddit,
-                                            filter=['url', 'author', 'title', 'subreddit']))
-
+                                            filter=['url', 'author', 'title', 'subreddit'])
             for sub in subs:
                 words_in_title = sub.title.split()
                 stock_mentions = list(set(filter(lambda word : word.lower().startswith('$'), words_in_title))) 
                 if len(stock_mentions) > 0:
                     for stock_mention in stock_mentions:
                         if stock_mention in stocks:
+                            print("Adding a user mention", "----", stock_mention)
                             submit_time = datetime.datetime.fromtimestamp(sub.created_utc).isoformat()
                             try: 
-                                cursor.execute(insert_mention, (stocks[stock_mention], submit_time, sub.title, 'wallstreetbets'))
+                                cursor.execute(insert_mention, (stocks[stock_mention], submit_time, sub.title, subreddit))
                             except(Exception) as error:
                                 print(error)
             

@@ -71,6 +71,7 @@ def create_tables():
             topics TEXT ARRAY, 
             sentiment NUMERIC(5,2) NOT NULL,
             FOREIGN KEY (source_id) REFERENCES reddit (id)
+        )
         """
         )
 
