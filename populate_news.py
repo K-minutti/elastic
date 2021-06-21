@@ -30,7 +30,7 @@ def populate_news():
         lookback = datetime.datetime(2021,4,15).isoformat()
         for symbol in stocks:
             try:
-                search = gn.search(f"STOCK:{symbol}", from_=lookback, to_=today)
+                search = gn.search(symbol, from_=lookback, to_=today)
                 for entry in search['entries']:
                     try:
                         url= entry['link']

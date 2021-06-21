@@ -17,10 +17,10 @@ def expert_ai_analysis( text_input: str):
         main_phrases =  [p.value for p in output.main_phrases]
         main_lemmas =  [l.value for l in output.main_lemmas]
         topics =  [t.label for t in output.topics]
-        
         sentiment = output.sentiment.overall
+
     except Exception as error:
         print(error)
         return None
-    return {'entities': entities, 'main_phrases': main_phrases, 'main_lemmas': main_lemmas, 'topics': topics, 'sentitment': sentiment}
+    return {'entities': entities, 'main_phrases': main_phrases, 'main_lemmas': main_lemmas, 'topics': topics, 'sentiment': sentiment}
 

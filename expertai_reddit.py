@@ -27,6 +27,8 @@ def expertai_reddit():
         for post_id in reddit_posts:
             text = reddit_posts[post_id]
             values = expert_ai_analysis(text)
+            print("post_id", post_id)
+            print("expert ai values", values)
             if values != None:
                 cursor.execute(insert_expert_analysis, (post_id,values['entities'], values['main_phrases'], values['main_lemmas'], values['topics'], values['sentiment']))
             
