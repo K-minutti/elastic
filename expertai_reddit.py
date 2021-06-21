@@ -4,8 +4,6 @@ import psycopg2.extras
 from expert import expert_ai_analysis
 
 
-expert_ai_analysis()
-
 def expertai_reddit():
     connection = None
     try:
