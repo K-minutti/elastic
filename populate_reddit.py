@@ -23,24 +23,24 @@ def populate_reddit():
         #SQL to execute for each reddit post
         insert_mention = "INSERT INTO reddit(stock_id, date, content, subreddit) VALUES(%s, %s, %s, %s)"
                 
+        all_subreddits = ['stocks', 'wallstreetbets']
+        for subreddit in all_subreddits:
+            start_epoch = int(datetime.datetime(2021,4,15).timestamp())
+            subs = list(api.search_submissions(after=start_epoch, 
+                                            subreddit=subreddit,
+                                            filter=['url', 'author', 'title', 'subreddit']))
 
-        start_epoch = int(datetime.datetime(2021,4,15).timestamp())
-        subs = list(api.search_submissions(after=start_epoch, 
-                                        subreddit='wallstreetbets',
-                                        filter=['url', 'author', 'title', 'subreddit'],
-                                        limit=30))
-
-        for sub in subs:
-            words_in_title = sub.title.split()
-            stock_mentions = list(set(filter(lambda word : word.lower().startswith('$'), words_in_title))) 
-            if len(stock_mentions) > 0:
-                for stock_mention in stock_mentions:
-                    if stock_mention in stocks:
-                        submit_time = datetime.datetime.fromtimestamp(sub.created_utc).isoformat()
-                        try: 
-                            cursor.execute(insert_mention, (stocks[stock_mention], submit_time, sub.title, 'wallstreetbets'))
-                        except(Exception) as error:
-                            print(error)
+            for sub in subs:
+                words_in_title = sub.title.split()
+                stock_mentions = list(set(filter(lambda word : word.lower().startswith('$'), words_in_title))) 
+                if len(stock_mentions) > 0:
+                    for stock_mention in stock_mentions:
+                        if stock_mention in stocks:
+                            submit_time = datetime.datetime.fromtimestamp(sub.created_utc).isoformat()
+                            try: 
+                                cursor.execute(insert_mention, (stocks[stock_mention], submit_time, sub.title, 'wallstreetbets'))
+                            except(Exception) as error:
+                                print(error)
             
         connection.commit()
         cursor.close()

@@ -40,7 +40,7 @@ def create_tables():
         )
         """,
         """ 
-        CREATE TABLE reddit (C
+        CREATE TABLE reddit (
             id SERIAL PRIMARY KEY,
             stock_id INTEGER NOT NULL,
             date DATE NOT NULL,
@@ -50,10 +50,9 @@ def create_tables():
         )
         """,
         """
-        CREATE TABLE expert_analysis_news (
+        CREATE TABLE expert_ai_news (
             id SERIAL PRIMARY KEY,
             source_id INTEGER NOT NULL, 
-            source_type TEXT NOT NULL,
             entities TEXT ARRAY,
             main_phrases TEXT ARRAY,
             main_lemmas TEXT ARRAY,
@@ -63,10 +62,9 @@ def create_tables():
         )
         """,
         """
-       CREATE TABLE expert_analysis_reddit (
+       CREATE TABLE expert_ai_reddit (
             id SERIAL PRIMARY KEY,
             source_id INTEGER NOT NULL, 
-            source_type TEXT NOT NULL,
             entities TEXT ARRAY,
             main_phrases TEXT ARRAY,
             main_lemmas TEXT ARRAY,
@@ -77,8 +75,6 @@ def create_tables():
         
         )
 
-    #we will have a separate table for the data receive from expert ai every news item and every reddit post will have
-    #a row of data for it in the expert_analysis table which will hold all the data from the full_analysis() func in the expert api sdk
 
     connection = None
     try: 
