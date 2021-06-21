@@ -33,6 +33,7 @@ def create_tables():
             id SERIAL PRIMARY KEY,
             stock_id INTEGER NOT NULL, 
             date DATE NOT NULL, 
+            title TEXT NOT NULL,
             content TEXT NOT NULL, 
             source TEXT NOT NULL, 
             FOREIGN KEY (stock_id) REFERENCES stock (id)

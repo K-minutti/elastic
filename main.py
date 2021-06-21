@@ -1,6 +1,5 @@
 import fastapi
 import uvicorn
-from services.price_data import get_data
 # from typing import Optional
 
 api = fastapi.FastAPI()
