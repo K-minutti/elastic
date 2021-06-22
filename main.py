@@ -67,7 +67,7 @@ def get_sentiment_by_symbol(symbol: str, request: Request):
         else:
             reddit_sentiment_by_date[reddit_post['date']] = [post_analysis]
         
-    #http://127.0.0.1:8000/api/sentiment?symbol=TWTR
+
     return {"stock_info": stock,  "price_data_hour": hourly_price_data, "price_data_day": daily_price_data, "news_sentiment": news_sentiment_by_date, "reddit_sentiment":  reddit_sentiment_by_date }
 
 
