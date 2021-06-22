@@ -1,13 +1,13 @@
-import fastapi
 import uvicorn
 import psycopg2
 import psycopg2.extras
 from config import config
+from fastapi import FastAPI, Request
 
-api = fastapi.FastAPI()
+api = FastAPI()
 params= config()
 connection = psycopg2.connect(**params)
-cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+cursor = connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 
 @api.get('/')
 def index():
@@ -16,25 +16,59 @@ def index():
 @api.get('/api/stocks')
 def get_stocks():
     cursor.execute(""" 
-        SELECT symbol, name, exchange, market_cap, sector FROM stock ORDER BY symbol
+        SELECT symbol FROM stock ORDER BY symbol
     """)
     all_stocks = cursor.fetchall()
-    stocks = {}
-    for stock in all_stocks:
-        stocks[stock['symbol']] = {"name" : stock['name'], "exhange" : stock['exchange'], 'market_cap': stock['market_cap'], 'sector': stock['sector']}
-    return {"stocks": stocks}
+    return {"stocks": all_stocks}
 
 @api.get('/api/sentiment')
-def get_sentiment_by_symbol(symbol: str):
+def get_sentiment_by_symbol(symbol: str, request: Request):
     cursor.execute(""" 
-        SELECT * FROM stock where symbol = %s;
+        SELECT * FROM stock WHERE symbol = %s;
     """, (symbol,))
-    stock_data = cursor.fetchone()
-    #from price data return two sets of data one for the hourly series and another for daily
-    #from news and reddit get all of the rows of data and then join for new with expert_ai_news and for reddit expert_ai_reddit
-    #return a series of data for each
-    print(stock_data['id'])
-    return {"stock_info": stock_data}
+    stock = cursor.fetchone()
+    stock_id = stock['id']
+    
+    cursor.execute("""
+        SELECT * FROM price_data WHERE stock_id = %s AND interval = 'hour';
+    """, (stock_id,))
+    hourly_price_data = cursor.fetchall()
+
+    cursor.execute("""
+        SELECT * FROM price_data WHERE stock_id = %s AND interval = 'day';
+    """, (stock_id,))
+    daily_price_data = cursor.fetchall()
+
+    cursor.execute("""
+        SELECT * FROM news WHERE stock_id = %s;
+    """, (stock_id,))
+    news = cursor.fetchall()
+
+    news_sentiment_by_date = {}
+    for news_item in news:
+        cursor.execute("""
+        SELECT * FROM expert_ai_news WHERE source_id = %s;
+        """, (news_item['id'],))
+        article_analysis =  cursor.fetchone()
+        if news_item['date'] in news_sentiment_by_date:
+            news_sentiment_by_date[news_item['date']].append(article_analysis)
+        else:
+            news_sentiment_by_date[news_item['date']] = [article_analysis]
+        
+
+    reddit_sentiment_by_date = {}
+    for reddit_post in news:
+        cursor.execute("""
+        SELECT * FROM expert_ai_reddit WHERE source_id = %s;
+        """, (reddit_post['id'],))
+        post_analysis =  cursor.fetchone()
+        if reddit_post['date'] in reddit_sentiment_by_date:
+            reddit_sentiment_by_date[reddit_post['date']].append(post_analysis)
+        else:
+            reddit_sentiment_by_date[reddit_post['date']] = [post_analysis]
+        
+    #http://127.0.0.1:8000/api/sentiment?symbol=TWTR
+    return {"stock_info": stock,  "price_data_hour": hourly_price_data, "price_data_day": daily_price_data, "news_sentiment": news_sentiment_by_date, "reddit_sentiment":  reddit_sentiment_by_date }
 
 
 

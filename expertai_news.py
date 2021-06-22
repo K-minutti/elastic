@@ -21,17 +21,7 @@ def expertai_news():
    
         #SQL to execute for each news article
         insert_expert_analysis = "INSERT INTO expert_ai_news(source_id, entities, main_phrases, main_lemmas, topics, sentiment) VALUES(%s, %s::text[], %s::text[], %s::text[], %s::text[], %s)"
-        """
-            CREATE TABLE expert_ai_news (
-            id SERIAL PRIMARY KEY,
-            source_id INTEGER NOT NULL, 
-            entities TEXT ARRAY,
-            main_phrases TEXT ARRAY,
-            main_lemmas TEXT ARRAY,
-            topics TEXT ARRAY, 
-            sentiment NUMERIC(5,2) NOT NULL,
-            FOREIGN KEY (source_id) REFERENCES news (id)
-        """
+
         for article_id in news_articles:
             text = news_articles[article_id]
             print("Article_id", article_id)
